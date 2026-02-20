@@ -1017,3 +1017,49 @@ Module(
     }
   }
 );
+Module(
+  {
+    pattern: "tagall ?(.*)",
+    desc: "Mentions all group members with group name, custom message and members count with custom line, prefix for each member, and a footer quote.",
+    use: "group",
+  },
+  async (message, match) => {
+    try {
+      if (!message.isGroup) {
+        return await message.sendReply("_This command can only be used in a group!_");
+      }
+
+      await message.react("✨");
+
+      const metadata = await message.client.groupMetadata(message.jid);
+      const groupName = metadata.subject;
+      const participants = metadata.participants;
+      const memberCount = participants.length;
+
+      const mentions = participants.map(p => p.id);
+      const customMessage = match[1] || "";
+
+      let text = `*🧺ᩙᩖ 𝐆𝗋𐐫υׅ𝗉:* ${groupName}\n`;
+      text += `*🎀ᩙᩖ 𝐌ᧉ᥍︩︪᥍︩︪𐓟𝗀ᧉ:* ${customMessage || "No message"}\n`;
+      text += `*🗻 ᩞᩨ𝐌ᧉꭑ𝖻۫ᧉ𝗋᥍︩︪  (${memberCount})*\n`;
+      text += `⩋‌⩃‌⩋‌⩃‌⩋ \`𝐓𐓟𝗀𐓟𝗅𝗅\`⩋‌⩃‌⩋‌⩃‌⩋\n\n`;
+
+      participants.forEach(p => {
+        text += `🥮ᩧᩙᩪᩩ̶̷ ㅤ ͟ ͟ ͟ ͟ @${p.id.split("@")[0]}\n`;
+      });
+
+      text += `\n*ඉᩧ ㅤ🛁ᩙ꤬ㅤ𝐇ᧉׅαᥣեɦ𝗒 ꗏ𝗄ıᩧⴄ ᑯⱺᧉׅꗏⴄ’𝗍 𝗃υꗏ𝗍 𝗋αᑯıᩧαեᧉׅ ᑲᧉׅαυե𝗒, ıᩧ𝗍 αᥣꗏⱺ 𝗋αᑯıᩧαեᧉׅꗏ ᥣⱺ𝗏𝖾. 𝐘ⱺυ𝗋 ꗏ𝗄ıᩧⴄ ıᩧꗏ 𝗒ⱺυ𝗋 ꭑⱺꗏ𝗍 ρ𝗋ıᩧ𝖼ᧉׅᥣᧉׅꗏꗏ α𝖼𝖼ᧉׅꗏꗏⱺ𝗋𝗒. 𝐂ɦᧉׅ𝗋ıᩧꗏɦ ıᩧ𝗍. ൭ㅤᰰᮬㅤ̣*\n`;
+
+      await message.client.sendMessage(message.jid, {
+        text: text,
+        mentions: mentions,
+      });
+
+      await message.react("💖");
+
+    } catch (err) {
+      await message.sendReply(`_Error: ${err.message}_`);
+    }
+  }
+);
+
