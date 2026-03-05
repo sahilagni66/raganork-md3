@@ -39,8 +39,9 @@
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7",
     "simple-git": "^3.27.0",
-    "youtube-sr": "^4.3.11"
+    "youtube-sr": "^5.2.0"
   }
 }
+
 
 
